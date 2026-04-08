@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Lock Egoist Showcase</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #020408;
+      font-family: 'Inter', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    .hero-header {
+      text-align: center;
+      padding: 3.5rem 1rem 2rem;
+      position: relative;
+    }
+
+    .hero-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(0,200,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .label {
+      display: inline-block;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #00c8ff;
+      border: 1px solid rgba(0,200,255,0.3);
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+      background: rgba(0,200,255,0.05);
+    }
+
+    h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 30%, #00c8ff 70%, #cc44ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.8rem;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #00c8ff, #cc44ff);
+      margin: 1.2rem auto 0;
+      border-radius: 2px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem 2.5rem 4rem;
+      perspective: 1800px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      height: 420px;
+      position: relative;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .card.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .card-front {
+      position: relative;
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.1) contrast(1.05);
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-front img {
+      transform: scale(1.04);
+    }
+
+    .card-front::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .card-front-label {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .card-front-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+
+    .card-number {
+      font-family: 'Oswald', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.12);
+      line-height: 1;
+    }
+
+    .card-front-border {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
+      z-index: 3;
+      transition: border-color 0.3s;
+    }
+
+    .card:hover .card-front-border {
+      border-color: rgba(0,200,255,0.4);
+      box-shadow: inset 0 0 0 1px rgba(0,200,255,0.15), 0 0 30px rgba(0,200,255,0.1);
+    }
+
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(145deg, #0a0f1e 0%, #0e1428 50%, #0a0f1e 100%);
+      border: 1px solid rgba(0,200,255,0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-back::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(0,200,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card-back::after {
+      content: '';
+      position: absolute;
+      bottom: -60px; left: -60px;
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(204,68,255,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .back-tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #00c8ff;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .back-name {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .back-skill {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #cc44ff;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .back-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(0,200,255,0.3), transparent);
+      margin-bottom: 1.5rem;
+    }
+
+    .back-quote {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.65);
+      font-style: italic;
+      position: relative;
+      padding-left: 1rem;
+      border-left: 2px solid rgba(0,200,255,0.3);
+    }
+
+    .back-flip-hint {
+      position: absolute;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.2);
+      text-transform: uppercase;
+    }
+
+    .footer-bar {
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.15);
+    }
+
+    .footer-bar span { color: #00c8ff; }
+
+    @media (max-width: 600px) {
+      .grid { padding: 1rem 1rem 3rem; gap: 1.2rem; }
+      .card { height: 360px; }
+      .back-name { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-header">
+    <div class="label">Blue Lock Project</div>
+    <h1>Egoist Showcase</h1>
+    <p class="subtitle">The chosen eleven — hover to reveal</p>
+    <div class="divider"></div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card" data-delay="0">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://i1.sndcdn.com/artworks-nQnXRoMFN4QHmKaz-tlRghw-t500x500.jpg" alt="Isagi Yoichi">
+          <div class="card-front-label">
+            <div class="card-front-name">Isagi<br>Yoichi</div>
+            <div class="card-number">11</div>
+          </div>
+          <div class="card-front-border"></div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-tag">Striker · Blue Lock</div>
+          <div class="back-name">Isagi<br>Yoichi</div>
+          <div class="back-skill">Direct Shot · Metavision</div>
+          <div class="back-divider"></div>
+          <div class="back-quote">"To be the world's greatest striker, I must devour everything."</div>
+          <div class="back-flip-hint">hover to flip</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-delay="150">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSHmOGxFKAo6cDS2f1w8z4MnNyeUHRtC2nQw&s" alt="Meguru Bachira">
+          <div class="card-front-label">
+            <div class="card-front-name">Bachira<br>Meguru</div>
+            <div class="card-number">08</div>
+          </div>
+          <div class="card-front-border"></div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-tag">Dribbler · Blue Lock</div>
+          <div class="back-name">Bachira<br>Meguru</div>
+          <div class="back-skill">Monster Dribbling</div>
+          <div class="back-divider"></div>
+          <div class="back-quote">"I play with the monster inside me, chasing freedom on the field."</div>
+          <div class="back-flip-hint">hover to flip</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-delay="300">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://thefictionalfanatic1.wordpress.com/wp-content/uploads/2023/03/nagi-2910509735-e1679362302540.jpg?w=1078" alt="Seishiro Nagi">
+          <div class="card-front-label">
+            <div class="card-front-name">Nagi<br>Seishiro</div>
+            <div class="card-number">06</div>
+          </div>
+          <div class="card-front-border"></div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-tag">Forward · Blue Lock</div>
+          <div class="back-name">Nagi<br>Seishiro</div>
+          <div class="back-skill">Perfect Trapping</div>
+          <div class="back-divider"></div>
+          <div class="back-quote">"If it's a hassle, I won't do it. But soccer... is kinda fun."</div>
+          <div class="back-flip-hint">hover to flip</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" data-delay="450">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://characterai.io/i/200/static/avatars/uploaded/2024/6/16/EqnAF9rx3JeqZqYc0PlKds-M9F8R3XaW7CWSv0cqAxw.webp?webp=true&anim=0" alt="Hyoma Chigiri">
+          <div class="card-front-label">
+            <div class="card-front-name">Chigiri<br>Hyoma</div>
+            <div class="card-number">05</div>
+          </div>
+          <div class="card-front-border"></div>
+        </div>
+        <div class="card-face card-back">
+          <div class="back-tag">Speedster · Blue Lock</div>
+          <div class="back-name">Chigiri<br>Hyoma</div>
+          <div class="back-skill">44-Panther Sniper Speed</div>
+          <div class="back-divider"></div>
+          <div class="back-quote">"My legs are my wings. I'll fly past anyone who dares stop me."</div>
+          <div class="back-flip-hint">hover to flip</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bar">Blue Lock · <span>Ego</span> is everything</div>
+
+  <script>
+    const cards = document.querySelectorAll('.card');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = parseInt(entry.target.dataset.delay) || 0;
+          setTimeout(() => entry.target.classList.add('visible'), delay);
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    cards.forEach(c => obs.observe(c));
+  </script>
+
+</body>
+</html>
