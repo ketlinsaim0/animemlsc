@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Lock Egoist Showcase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #050505;
+      font-family: 'Oswald', 'Inter', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
+      font-size: 3rem;
+      color: #00f2ff;
+      text-shadow: 0 0 20px #00f2ff, 0 0 40px magenta;
+      margin: 2rem 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      perspective: 1500px;
+    }
+    .card {
+      width: 100%;
+      height: 400px;
+      position: relative;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.7s;
+    }
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      box-shadow: 0 0 15px #00f2ff;
+      animation: neonPulse 2s infinite alternate;
+    }
+    @keyframes neonPulse {
+      from { box-shadow: 0 0 15px #00f2ff; }
+      to { box-shadow: 0 0 30px magenta; }
+    }
+    .card-back {
+      transform: rotateY(180deg);
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .card-back h2 {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #00f2ff;
+      text-shadow: 0 0 15px magenta;
+      margin-bottom: 1rem;
+    }
+    .card-back h3 {
+      font-size: 1.2rem;
+      color: magenta;
+      margin-bottom: 1rem;
+    }
+    .card-back p {
+      font-size: 1rem;
+      line-height: 1.4;
+      color: #ddd;
+    }
+    @keyframes flyIn {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      .card { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Blue Lock Egoist Showcase</h1>
+  <div class="grid">
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://i1.sndcdn.com/artworks-nQnXRoMFN4QHmKaz-tlRghw-t500x500.jpg" alt="Isagi Yoichi">
+        </div>
+        <div class="card-face card-back">
+          <h2>Isagi Yoichi</h2>
+          <h3>Direct Shot / Metavision</h3>
+          <p>"To be the world's greatest striker, I must devour everything."</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSHmOGxFKAo6cDS2f1w8z4MnNyeUHRtC2nQw&s" alt="Meguru Bachira">
+        </div>
+        <div class="card-face card-back">
+          <h2>Meguru Bachira</h2>
+          <h3>Monster Dribbling</h3>
+          <p>"I play with the monster inside me, chasing freedom on the field."</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://static.wikia.nocookie.net/bluelock/images/0/0a/Seishiro_Nagi_Anime.png" alt="Seishiro Nagi">
+        </div>
+        <div class="card-face card-back">
+          <h2>Seishiro Nagi</h2>
+          <h3>Perfect Trapping</h3>
+          <p>"If it's a hassle, I won't do it. But soccer... is kinda fun."</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <img src="https://static.wikia.nocookie.net/bluelock/images/6/6f/Hyoma_Chigiri_Anime.png" alt="Hyoma Chigiri">
+        </div>
+        <div class="card-face card-back">
+          <h2>Hyoma Chigiri</h2>
+          <h3>44-Panther Sniper Speed</h3>
+          <p>"My legs are my wings. I'll fly past anyone who dares stop me."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Ensure images are loaded before showing cards
+    const cards = document.querySelectorAll('.card');
+    const images = document.querySelectorAll('.card-front img');
+    let loadedCount = 0;
+    images.forEach((img, index) => {
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === images.length) {
+          // Staggered entrance animation
+          cards.forEach((card, i) => {
+            setTimeout(() => {
+              card.style.animation = 'flyIn 0.8s forwards';
+            }, i * 300);
+          });
+        }
+      };
+    });
+  </script>
+</body>
+</html>
